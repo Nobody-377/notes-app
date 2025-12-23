@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Edit Note</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #eef9ec;
+  margin: 0;
+  padding: 18px;
+}
+
+/* Main card */
+.app {
+  max-width: 620px;
+  margin: auto;
+  background: #F9FFF1;
+  padding: 24px;
+  border-radius: 24px;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+}
+
+/* Inputs */
+input,
+textarea {
+  width: 100%;
+  padding: 14px;
+  margin-top: 14px;
+  border-radius: 16px;
+  font-size: 16px;
+  border: 1.5px solid #f0dbe6;
+  background: #fffafd;
+  color: #444;
+}
+
+/* Textarea */
+textarea {
+  min-height: 220px;
+  resize: vertical;
+  background: #fffde8; /* notebook yellow */
+}
+
+/* Focus glow */
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #9fd6b8;
+  box-shadow: 0 0 0 4px rgba(159,214,184,0.35);
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 18px;
+  font-size: 16px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* Update button (mint green) */
+.update {
+  background: #9fd6b8;
+  box-shadow: 0 8px 16px rgba(159,214,184,0.45);
+}
+
+.update:hover {
+  box-shadow: 0 10px 22px rgba(159,214,184,0.6);
+}
+
+/* Delete button (soft peach-pink) */
+.delete {
+  background: #f4b6c2;
+  box-shadow: 0 8px 16px rgba(244,182,194,0.45);
+}
+
+.delete:hover {
+  box-shadow: 0 10px 22px rgba(244,182,194,0.6);
+}
+
+/* Desktop love */
+@media (min-width: 768px) {
+  .app {
+    padding: 30px;
+  }
+
+  textarea {
+    min-height: 300px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+<div class="app">
+  <input id="title" />
+  <textarea id="content"></textarea>
+
+  <button class="update" onclick="updateNote()">Update</button>
+  <button class="delete" onclick="deleteNote()">Delete</button>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = Number(params.get("id"));
+
+let notes = JSON.parse(localStorage.getItem("notes")) || []
+let note;
+for (let i = 0; i < notes.length; i++) {
+  if (notes[i].id === id) {
+    note = notes[i];
+    break;
+  }
+}
+
+
+document.getElementById("title").value = note.title;
+document.getElementById("content").value = note.content;
+
+
+function saveNotes() {
+  localStorage.setItem("notes", JSON.stringify(notes));
+}
+
+function updateNote() {
+  note.title = document.getElementById("title").value;
+  note.content = document.getElementById("content").value;
+  alert(`Successfully Updated`)
+  saveNotes();
+}
+
+function deleteNote() {
+  notes = notes.filter(n => n.id !== id);
+  saveNotes();
+  window.location.href = "faltu.html";
+}
+</script>
+</body>
+</html>
